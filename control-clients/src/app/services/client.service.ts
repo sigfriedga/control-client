@@ -28,7 +28,7 @@ export class ClientService {
   getClients(): observable < Client[] > {
     this.client = this.clientsCollection.snapshotChanges().pipe(
       map(changes => {
-        return changes.map( action => {
+        return changes.map(action => {
           const data = action.payload.doc.data() as Client;
           data.id = action.payload.doc.id;
           return data
@@ -38,7 +38,33 @@ export class ClientService {
     return this.clients;
   }
 
-  addClient(client: Client){
+  addClient(client: Client) {
     this.clientsCollection.add(client);
+  }
+
+  getClient(id: string) {
+    this.clientDoc = this.db.doc < Client > (`clients/${id}`);
+    this.client = this.client.snapshotChanges().pipe(
+      map(action => {
+        if (action.payload.exist === false) {
+          return null;
+        } else {
+          const data = action.payload.data() as Client;
+          data.id = action.payload.id;
+          return data;
+        }
+      })
+    );
+    return this.client;
+  }
+
+  modifyClient(client: Client) {
+    this.clientDoc = this.db.doc(`clients/${client.id}`);
+    this.clientDoc.update(client);
+  }
+
+  deleteCliente(client: Client){
+    this.clientDoc = this.db.doc(`client/${client.id}`);
+    this.clientDoc.delete();
   }
 }
