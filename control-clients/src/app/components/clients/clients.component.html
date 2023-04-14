@@ -128,7 +128,7 @@
           <div class="form-group">
             <label for="balance">Saldo</label>
             <input type="number" name="balance" class="form-control" #balance="ngModel" [(ngModel)]="client.balance"
-              [ngClass]="{ 'is-invalid': balance.errors && balance.touched }" required/>
+              [ngClass]="{ 'is-invalid': balance.errors && balance.touched }" required />
             <div [hidden]="!balance.errors?.required" class="ivalid-feedback">
               Saldo solicitado
             </div>
